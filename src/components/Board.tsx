@@ -105,7 +105,13 @@ const Board: React.FC = () => {
 
   useEffect(() => {
     let timerId = setInterval(() => {
-      setTimerGame((prev) => prev - 1)
+      setTimerGame((prev) => {
+        if (prev - 1 === 0) {
+          clearInterval(timerId)
+          alert("you lose")
+        }
+        return prev - 1
+      })
     }, 1000)
 
     return () => {
@@ -121,7 +127,13 @@ const Board: React.FC = () => {
       setOpenedCells((prev) => [...prev, id])
     }
   }
-  console.log(cells)
+  useEffect(() => {
+    let countOpened = 0
+    for (const cell of cells) {
+      if (cell.isOpen) countOpened++
+    }
+    if (countOpened === cells.length) alert("you win")
+  }, [cells])
 
   return (
     <div>
